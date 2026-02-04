@@ -1,3 +1,5 @@
+// Update app.tsx with new props for followers and followees for useritemscroller and for status item scroller pass in story and feed
+
 import "./App.css";
 import { useContext } from "react";
 import { UserInfoContext } from "./components/userInfo/UserInfoContexts";
@@ -14,8 +16,8 @@ import MainLayout from "./components/mainLayout/MainLayout";
 import Toaster from "./components/toaster/Toaster";
 import FolloweesScroller from "./components/mainLayout/FolloweesScroller";
 import FollowersScroller from "./components/mainLayout/FollowersScroller";
-import FeedScroller from "./components/mainLayout/FeedScroller";
-import StoryScroller from "./components/mainLayout/StoryScroller";
+import FeedScroller from "./components/mainLayout/StatusItemScroller";
+import StoryScroller from "./components/mainLayout/StatusItemScroller";
 
 const App = () => {
   const { currentUser, authToken } = useContext(UserInfoContext);
@@ -31,7 +33,7 @@ const App = () => {
         {isAuthenticated() ? (
           <AuthenticatedRoutes />
         ) : (
-          <UnauthenticatedRoutes />
+          <UnauthenticatedRoutes />// Update app.tsx with new props for followers and followees for useritemscroller and for status item scroller pass in story and feed
         )}
       </BrowserRouter>
     </div>
@@ -44,13 +46,25 @@ const AuthenticatedRoutes = () => {
   return (
     <Routes>
       <Route element={<MainLayout />}>
-        <Route index element={<Navigate to={`/feed/${displayedUser!.alias}`} />} />
-        <Route path="feed/:displayedUser" element={<FeedScroller />} />
+        <Route
+          index
+          element={<Navigate to={`/feed/${displayedUser!.alias}`} />}
+        />
+        <Route path="feed/:displayedUser" element={<StatusItemScroller />} />
         <Route path="story/:displayedUser" element={<StoryScroller />} />
-        <Route path="followees/:displayedUser" element={<FolloweesScroller />} />
-        <Route path="followers/:displayedUser" element={<FollowersScroller />} />
+        <Route
+          path="followees/:displayedUser"
+          element={<FolloweesScroller />}
+        />
+        <Route
+          path="followers/:displayedUser"
+          element={<FollowersScroller />}
+        />
         <Route path="logout" element={<Navigate to="/login" />} />
-        <Route path="*" element={<Navigate to={`/feed/${displayedUser!.alias}`} />} />
+        <Route
+          path="*"
+          element={<Navigate to={`/feed/${displayedUser!.alias}`} />}
+        />
       </Route>
     </Routes>
   );
