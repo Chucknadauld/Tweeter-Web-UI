@@ -1,5 +1,8 @@
 import { useContext } from "react";
-import { UserInfoContext, UserInfoActionsContext } from "../userInfo/UserInfoContexts";
+import {
+  UserInfoContext,
+  UserInfoActionsContext,
+} from "../userInfo/UserInfoContexts";
 import { useState, useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { AuthToken, User } from "tweeter-shared";
@@ -15,7 +18,7 @@ interface Props {
     authToken: AuthToken,
     userAlias: string,
     pageSize: number,
-    lastItem: User | null
+    lastItem: User | null,
   ) => Promise<[User[], boolean]>;
   getUser: (authToken: AuthToken, alias: string) => Promise<User | null>;
   featurePath: string;
@@ -65,7 +68,7 @@ const UserItemScroller = (props: Props) => {
         authToken!,
         displayedUser!.alias,
         PAGE_SIZE,
-        lastItem
+        lastItem,
       );
 
       setHasMoreItems(() => hasMore);
@@ -75,7 +78,7 @@ const UserItemScroller = (props: Props) => {
       displayToast(
         ToastType.Error,
         `Failed to load users because of exception: ${error}`,
-        0
+        0,
       );
     }
   };
@@ -101,3 +104,5 @@ const UserItemScroller = (props: Props) => {
     </div>
   );
 };
+
+export default UserItemScroller;
