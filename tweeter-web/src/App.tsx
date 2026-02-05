@@ -1,5 +1,3 @@
-// Update app.tsx with new props for followers and followees for useritemscroller and for status item scroller pass in story and feed
-
 import "./App.css";
 import { useContext } from "react";
 import { UserInfoContext } from "./components/userInfo/UserInfoContexts";
@@ -16,8 +14,8 @@ import MainLayout from "./components/mainLayout/MainLayout";
 import Toaster from "./components/toaster/Toaster";
 import FolloweesScroller from "./components/mainLayout/FolloweesScroller";
 import FollowersScroller from "./components/mainLayout/FollowersScroller";
-import FeedScroller from "./components/mainLayout/StatusItemScroller";
-import StoryScroller from "./components/mainLayout/StatusItemScroller";
+import FeedScroller from "./components/mainLayout/FeedScroller";
+import StoryScroller from "./components/mainLayout/StoryScroller";
 
 const App = () => {
   const { currentUser, authToken } = useContext(UserInfoContext);
@@ -33,7 +31,7 @@ const App = () => {
         {isAuthenticated() ? (
           <AuthenticatedRoutes />
         ) : (
-          <UnauthenticatedRoutes />// Update app.tsx with new props for followers and followees for useritemscroller and for status item scroller pass in story and feed
+          <UnauthenticatedRoutes />
         )}
       </BrowserRouter>
     </div>
@@ -50,7 +48,7 @@ const AuthenticatedRoutes = () => {
           index
           element={<Navigate to={`/feed/${displayedUser!.alias}`} />}
         />
-        <Route path="feed/:displayedUser" element={<StatusItemScroller />} />
+        <Route path="feed/:displayedUser" element={<FeedScroller />} />
         <Route path="story/:displayedUser" element={<StoryScroller />} />
         <Route
           path="followees/:displayedUser"
