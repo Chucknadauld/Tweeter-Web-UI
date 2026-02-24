@@ -1,15 +1,12 @@
 import "./Register.css";
 import "bootstrap/dist/css/bootstrap.css";
-import { useContext, ChangeEvent, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { ChangeEvent, useState } from "react";
+import { Link } from "react-router-dom";
 import AuthenticationFormLayout from "../AuthenticationFormLayout";
 import { AuthToken, FakeData, User } from "tweeter-shared";
-import { ToastActionsContext } from "../../toaster/ToastContexts";
-import { UserInfoActionsContext } from "../../userInfo/UserInfoContexts";
 import { Buffer } from "buffer";
 import AuthenticationFields from "../AuthenticationFields";
-import { AuthenticationPresenter, AuthenticationView } from "../../../presenters/AuthenticationPresenter";
-import { ToastType } from "../../toaster/Toast";
+import { useAuthenticationPresenter } from "../../../hooks/useAuthenticationPresenter";
 
 const Register = () => {
   const [firstName, setFirstName] = useState("");
@@ -21,28 +18,7 @@ const Register = () => {
   const [imageFileExtension, setImageFileExtension] = useState<string>("");
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [presenter] = useState(() => {
-    const view: AuthenticationView = {
-      setIsLoading: setIsLoading,
-      navigateToFeed: (user: User) => {
-        navigate(`/feed/${user.alias}`);
-      },
-      updateUserInfo: (user: User, authToken: AuthToken, rememberMe: boolean) => {
-        updateUserInfo(user, user, authToken, rememberMe);
-      },
-      displayErrorMessage: (message: string) => {
-        displayToast(ToastType.Error, message, 0);
-      },
-      displayInfoMessage: (message: string, duration: number = 3000) => {
-        displayToast(ToastType.Info, message, duration);
-      },
-    };
-    return new AuthenticationPresenter(view);
-  });
-
-  const navigate = useNavigate();
-  const { updateUserInfo } = useContext(UserInfoActionsContext);
-  const { displayToast } = useContext(ToastActionsContext);
+  const presenter = useAuthenticationPresenter(setIsLoading);
 
   const checkSubmitButtonStatus = (): boolean => {
     return (

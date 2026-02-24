@@ -6,13 +6,12 @@ export class FolloweesPresenter extends PagedItemPresenter<User> {
     super(view);
   }
 
-  protected getLoadMoreItemsOperation(): (
-    authToken: AuthToken,
+  protected async getLoadMoreItems(
+    _authToken: AuthToken,
     userAlias: string,
     pageSize: number,
     lastItem: User | null
-  ) => Promise<[User[], boolean]> {
-    return async (authToken, userAlias, pageSize, lastItem) =>
-      FakeData.instance.getPageOfUsers(lastItem, pageSize, userAlias);
+  ): Promise<[User[], boolean]> {
+    return FakeData.instance.getPageOfUsers(lastItem, pageSize, userAlias);
   }
 }

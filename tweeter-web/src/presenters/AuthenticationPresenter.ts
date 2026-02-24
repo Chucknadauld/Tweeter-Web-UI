@@ -19,8 +19,7 @@ export class AuthenticationPresenter extends Presenter<AuthenticationView> {
 
   public async authenticateUser(
     authenticationOperation: () => Promise<[User, AuthToken]>,
-    rememberMe: boolean,
-    originalUrl?: string
+    rememberMe: boolean
   ): Promise<void> {
     this.view.setIsLoading(true);
 

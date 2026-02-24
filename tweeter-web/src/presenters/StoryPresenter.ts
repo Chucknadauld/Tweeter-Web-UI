@@ -6,13 +6,12 @@ export class StoryPresenter extends PagedItemPresenter<Status> {
     super(view);
   }
 
-  protected getLoadMoreItemsOperation(): (
-    authToken: AuthToken,
-    userAlias: string,
+  protected async getLoadMoreItems(
+    _authToken: AuthToken,
+    _userAlias: string,
     pageSize: number,
     lastItem: Status | null
-  ) => Promise<[Status[], boolean]> {
-    return async (authToken, userAlias, pageSize, lastItem) =>
-      FakeData.instance.getPageOfStatuses(lastItem, pageSize);
+  ): Promise<[Status[], boolean]> {
+    return FakeData.instance.getPageOfStatuses(lastItem, pageSize);
   }
 }

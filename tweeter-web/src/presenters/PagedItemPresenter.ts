@@ -14,12 +14,12 @@ export abstract class PagedItemPresenter<T> extends Presenter<PagedItemView<T>> 
     super(view);
   }
 
-  protected abstract getLoadMoreItemsOperation(): (
+  protected abstract getLoadMoreItems(
     authToken: AuthToken,
     userAlias: string,
     pageSize: number,
     lastItem: T | null
-  ) => Promise<[T[], boolean]>;
+  ): Promise<[T[], boolean]>;
 
   reset(): void {}
 
@@ -30,8 +30,12 @@ export abstract class PagedItemPresenter<T> extends Presenter<PagedItemView<T>> 
   ): Promise<void> {
     const lastItem = this.view.getLastItem();
     await this.doFailureReportingOperation(async () => {
-      const op = this.getLoadMoreItemsOperation();
-      const [newItems, hasMore] = await op(authToken, userAlias, pageSize, lastItem);
+      const [newItems, hasMore] = await this.getLoadMoreItems(
+        authToken,
+        userAlias,
+        pageSize,
+        lastItem
+      );
       this.view.setHasMoreItems(hasMore);
       this.view.setLastItem(newItems.at(-1) ?? null);
       this.view.addItems(newItems);
