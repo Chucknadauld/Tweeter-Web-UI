@@ -1,12 +1,11 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import { UserInfoContext, UserInfoActionsContext } from "../userInfo/UserInfoContexts";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { User } from "tweeter-shared";
+import { User, FakeData } from "tweeter-shared";
 import { ToastActionsContext } from "../toaster/ToastContexts";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { PagedItemPresenter, PagedItemView } from "../../presenters/PagedItemPresenter";
 import { ToastType } from "../toaster/Toast";
-import { FakeData } from "tweeter-shared";
 
 export const PAGE_SIZE = 10;
 
@@ -22,17 +21,19 @@ function ItemScroller<T>(props: Props<T>) {
   const [hasMoreItems, setHasMoreItems] = useState(true);
   const [lastItem, setLastItem] = useState<T | null>(null);
   const [presenter, setPresenter] = useState<PagedItemPresenter<T> | null>(null);
+  const lastItemRef = useRef<T | null>(null);
+  lastItemRef.current = lastItem;
 
   const { displayedUser, authToken } = useContext(UserInfoContext);
   const { setDisplayedUser } = useContext(UserInfoActionsContext);
   const { displayedUser: displayedUserAliasParam } = useParams();
-  const navigate = useNavigate();
 
   useEffect(() => {
     const view: PagedItemView<T> = {
       addItems: (newItems: T[]) => setItems((prev) => [...prev, ...newItems]),
       setHasMoreItems: setHasMoreItems,
       setLastItem: setLastItem,
+      getLastItem: () => lastItemRef.current,
       displayErrorMessage: (message: string) => {
         displayToast(ToastType.Error, message, 0);
       },
