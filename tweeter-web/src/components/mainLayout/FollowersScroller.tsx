@@ -25,8 +25,13 @@ const FollowersScroller = () => {
       getUser={getUser}
       featurePath="/followers"
       loadErrorPrefix="Failed to load users"
-      itemComponentGenerator={(item) => (
-        <UserItem user={item} featurePath="/followers" />
+      provideNavigateToUser
+      itemComponentGenerator={(item, helpers) => (
+        <UserItem 
+          user={item} 
+          featurePath="/followers"
+          navigateToUser={helpers!.navigateToUser}
+        />
       )}
     />
   );
