@@ -7,7 +7,8 @@ import { AuthToken, FakeData, User } from "tweeter-shared";
 import { ToastActionsContext } from "../../toaster/ToastContexts";
 import { UserInfoActionsContext } from "../../userInfo/UserInfoContexts";
 import AuthenticationFields from "../AuthenticationFields";
-import { doAuthenticatedOperation } from "../../../utils/doAuthenticatedOperation";
+import { AuthenticationPresenter, AuthenticationView } from "../../../presenters/AuthenticationPresenter";
+import { ToastType } from "../../toaster/Toast";
 
 interface Props {
   originalUrl?: string;
@@ -18,6 +19,24 @@ const Login = (props: Props) => {
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [presenter] = useState(() => {
+    const view: AuthenticationView = {
+      setIsLoading: setIsLoading,
+      navigateToFeed: (user: User) => {
+        navigate(props.originalUrl ?? `/feed/${user.alias}`);
+      },
+      updateUserInfo: (user: User, authToken: AuthToken, rememberMe: boolean) => {
+        updateUserInfo(user, user, authToken, rememberMe);
+      },
+      displayErrorMessage: (message: string) => {
+        displayToast(ToastType.Error, message, 0);
+      },
+      displayInfoMessage: (message: string, duration: number = 3000) => {
+        displayToast(ToastType.Info, message, duration);
+      },
+    };
+    return new AuthenticationPresenter(view);
+  });
 
   const navigate = useNavigate();
   const { updateUserInfo } = useContext(UserInfoActionsContext);
@@ -34,15 +53,10 @@ const Login = (props: Props) => {
   };
 
   const doLogin = async () => {
-    await doAuthenticatedOperation(
-      displayToast,
-      setIsLoading,
-      "Failed to log user in",
+    await presenter.authenticateUser(
       () => login(alias, password),
-      (user: User, authToken: AuthToken) => {
-        updateUserInfo(user, user, authToken, rememberMe);
-        navigate(props.originalUrl ?? `/feed/${user.alias}`);
-      }
+      rememberMe,
+      props.originalUrl
     );
   };
 
