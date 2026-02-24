@@ -1,15 +1,14 @@
 import "./Register.css";
 import "bootstrap/dist/css/bootstrap.css";
-import { useContext } from "react";
-import { UserInfoActionsContext } from "../../userInfo/UserInfoContexts";
-import { ChangeEvent, useState } from "react";
+import { useContext, ChangeEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthenticationFormLayout from "../AuthenticationFormLayout";
 import { AuthToken, FakeData, User } from "tweeter-shared";
 import { ToastActionsContext } from "../../toaster/ToastContexts";
+import { UserInfoActionsContext } from "../../userInfo/UserInfoContexts";
 import { Buffer } from "buffer";
-import { ToastType } from "../../toaster/Toast";
 import AuthenticationFields from "../AuthenticationFields";
+import { doAuthenticatedOperation } from "../../../utils/doAuthenticatedOperation";
 
 const Register = () => {
   const [firstName, setFirstName] = useState("");
@@ -83,29 +82,24 @@ const Register = () => {
   };
 
   const doRegister = async () => {
-    try {
-      setIsLoading(true);
-
-      const [user, authToken] = await register(
-        firstName,
-        lastName,
-        alias,
-        password,
-        imageBytes,
-        imageFileExtension,
-      );
-
-      updateUserInfo(user, user, authToken, rememberMe);
-      navigate(`/feed/${user.alias}`);
-    } catch (error) {
-      displayToast(
-        ToastType.Error,
-        `Failed to register user because of exception: ${error}`,
-        0,
-      );
-    } finally {
-      setIsLoading(false);
-    }
+    await doAuthenticatedOperation(
+      displayToast,
+      setIsLoading,
+      "Failed to register user",
+      () =>
+        register(
+          firstName,
+          lastName,
+          alias,
+          password,
+          imageBytes,
+          imageFileExtension
+        ),
+      (user: User, authToken: AuthToken) => {
+        updateUserInfo(user, user, authToken, rememberMe);
+        navigate(`/feed/${user.alias}`);
+      }
+    );
   };
 
   const register = async (
@@ -182,7 +176,7 @@ const Register = () => {
   const switchAuthenticationMethodFactory = () => {
     return (
       <div className="mb-3">
-        Algready registered? <Link to="/login">Sign in</Link>
+        Already registered? <Link to="/login">Sign in</Link>
       </div>
     );
   };

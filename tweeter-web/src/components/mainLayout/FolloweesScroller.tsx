@@ -1,28 +1,33 @@
 import { AuthToken, FakeData, User } from "tweeter-shared";
-import UserItemScroller from "./UserItemScroller";
+import ItemScroller from "./ItemScroller";
+import UserItem from "../userItem/UserItem";
 
 const FolloweesScroller = () => {
-  const loadMoreFollowees = async (
+  const loadMoreItems = async (
     authToken: AuthToken,
     userAlias: string,
     pageSize: number,
-    lastFollowee: User | null,
+    lastItem: User | null
   ): Promise<[User[], boolean]> => {
-    return FakeData.instance.getPageOfUsers(lastFollowee, pageSize, userAlias);
+    return FakeData.instance.getPageOfUsers(lastItem, pageSize, userAlias);
   };
 
   const getUser = async (
     authToken: AuthToken,
-    alias: string,
+    alias: string
   ): Promise<User | null> => {
     return FakeData.instance.findUserByAlias(alias);
   };
 
   return (
-    <UserItemScroller
-      loadMoreItems={loadMoreFollowees}
+    <ItemScroller<User>
+      loadMoreItems={loadMoreItems}
       getUser={getUser}
       featurePath="/followees"
+      loadErrorPrefix="Failed to load users"
+      itemComponentGenerator={(item) => (
+        <UserItem user={item} featurePath="/followees" />
+      )}
     />
   );
 };
