@@ -41,7 +41,7 @@ const Register = () => {
     const file = event.target.files?.[0];
     handleImageFile(file);
   };
-
+  // handleImageFile should not be in the component
   const handleImageFile = (file: File | undefined) => {
     if (file) {
       setImageUrl(URL.createObjectURL(file));
@@ -85,9 +85,9 @@ const Register = () => {
           alias,
           password,
           imageBytes,
-          imageFileExtension
+          imageFileExtension,
         ),
-      rememberMe
+      rememberMe,
     );
   };
 

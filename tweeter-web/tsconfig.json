@@ -23,5 +23,5 @@
   },
   "include": [
     "src"
-  ]
+, "test/presenters/AppNavbarPresenter.test.ts", "test/presenters/PostStatusPresenter.test.ts"  ]
 }

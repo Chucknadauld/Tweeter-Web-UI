@@ -30,7 +30,8 @@
     "start": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview",
-    "reload": "npm run build && npm run serve"
+    "reload": "npm run build && npm run serve",
+    "test": "jest"
   },
   "eslintConfig": {
     "extends": [
