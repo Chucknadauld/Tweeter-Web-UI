@@ -1,6 +1,7 @@
 import { AuthToken } from "tweeter-shared";
 import { Presenter } from "./Presenter";
 import { BaseView } from "./BaseView";
+import { UserService } from "../services/UserService";
 
 export interface AppNavbarView extends BaseView {
   clearUserInfo: () => void;
@@ -8,8 +9,11 @@ export interface AppNavbarView extends BaseView {
 }
 
 export class AppNavbarPresenter extends Presenter<AppNavbarView> {
-  public constructor(view: AppNavbarView) {
+  private userService: UserService;
+
+  public constructor(view: AppNavbarView, userService: UserService) {
     super(view);
+    this.userService = userService;
   }
 
   public async logout(authToken: AuthToken): Promise<void> {
@@ -17,13 +21,13 @@ export class AppNavbarPresenter extends Presenter<AppNavbarView> {
 
     await this.doFailureReportingOperation(async () => {
       await this.performLogout(authToken);
+      this.view.clearInfoMessage();
       this.view.clearUserInfo();
       this.view.navigateToLogin();
     }, "Failed to log user out");
   }
 
   private async performLogout(authToken: AuthToken): Promise<void> {
-    // Simulate server call
-    await new Promise((res) => setTimeout(res, 1000));
+    await this.userService.logout(authToken);
   }
 }

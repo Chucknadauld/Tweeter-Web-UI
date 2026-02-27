@@ -40,6 +40,7 @@ function ItemScroller<T>(props: Props<T>) {
       displayInfoMessage: (message: string, duration: number = 3000) => {
         displayToast(ToastType.Info, message, duration);
       },
+      clearInfoMessage: () => {},
     };
 
     const newPresenter = props.presenterGenerator(view);

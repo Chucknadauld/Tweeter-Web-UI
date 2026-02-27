@@ -1,10 +1,14 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Login from "../../../../src/components/authentication/login/Login";
 import { MemoryRouter } from "react-router-dom";
-import { instance, mock, verify } from "ts-mockito";
+import { instance, mock, verify, anything } from "ts-mockito";
 import { AuthenticationPresenter } from "../../../../src/presenters/AuthenticationPresenter";
 import "@testing-library/jest-dom";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fab } from "@fortawesome/free-brands-svg-icons";
+// Add FontAwesome icons to prevent warnings
+library.add(fab);
 
 describe("Login Component", () => {
   it("starts with the sign-in button disabled", () => {
@@ -19,7 +23,9 @@ describe("Login Component", () => {
     await user.type(aliasField, "@testuser");
     await user.type(passwordField, "password");
 
-    expect(signInButton).toBeEnabled();
+    await waitFor(() => {
+      expect(signInButton).toBeEnabled();
+    });
   });
 
   it("disables sign-in button if either field is cleared", async () => {
@@ -28,10 +34,16 @@ describe("Login Component", () => {
 
     await user.type(aliasField, "@testuser");
     await user.type(passwordField, "password");
-    expect(signInButton).toBeEnabled();
+
+    await waitFor(() => {
+      expect(signInButton).toBeEnabled();
+    });
 
     await user.clear(aliasField);
-    expect(signInButton).toBeDisabled();
+
+    await waitFor(() => {
+      expect(signInButton).toBeDisabled();
+    });
   });
 
   it("calls presenter's login method with correct parameters when sign-in is pressed", async () => {

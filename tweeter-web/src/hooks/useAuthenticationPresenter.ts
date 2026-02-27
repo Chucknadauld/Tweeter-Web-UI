@@ -29,6 +29,7 @@ export function useAuthenticationPresenter(
         displayToastRef.current(ToastType.Error, message, 0),
       displayInfoMessage: (message: string, duration: number = 3000) =>
         displayToastRef.current(ToastType.Info, message, duration),
+      clearInfoMessage: () => {},
     }),
     [setIsLoading, navigate, originalUrl]
   );

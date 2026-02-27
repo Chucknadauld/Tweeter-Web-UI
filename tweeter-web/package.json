@@ -9,7 +9,6 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
     "@types/react": "^18.2.61",
     "@types/react-dom": "^18.2.19",
@@ -52,8 +51,13 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^20.11.24",
     "@vitejs/plugin-react": "^4.2.1",
+    "identity-obj-proxy": "^3.0.0",
+    "jest-environment-jsdom": "^30.2.0",
+    "ts-jest": "^29.4.6",
+    "ts-mockito": "^2.6.1",
     "vite": "^4.5.2",
     "vite-plugin-svgr": "^3.3.0",
     "vite-tsconfig-paths": "^4.3.1"
